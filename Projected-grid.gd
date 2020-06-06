@@ -28,17 +28,17 @@ var wd_wind_directionX: Array
 var wd_wind_directionY: Array
 var init_done := false
 
-func _ready():
+func _ready() -> void:
 	randomize()
 	for j in range(res):
-		var y = j/res - 0.5
-		var n_y = (j+1)/res - 0.5
+		var y := j/res - 0.5
+		var n_y := (j+1)/res - 0.5
 		begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
 		for i in range(res):
-			var x = i/res - 0.5
+			var x := i/res - 0.5
 
-			var new_x = x
-			var new_y = y
+			var new_x := x
+			var new_y := y
 
 			add_vertex(Vector3(x*2, 0, -y*2))
 
@@ -61,7 +61,7 @@ func _ready():
 	material_override.set_shader_param('waves_vectors', NUMBER_OF_WAVES)
 	init_done = true
 
-func _process(delta):
+func _process(delta: float) -> void:
 	material_override.set_shader_param('time_offset', OS.get_ticks_msec()/1000.0 * speed)
 
 func set_wavelength(value: float) -> void:
@@ -138,13 +138,13 @@ func get_displace(position: Vector2) -> Vector3:
 			
 	return new_p
 
-func update_waves():
+func update_waves() -> void:
 	#Generate Waves..
 	update_amplitude_frequency_all()
 	update_steepness_all()
 	update_wind_direction_all()
 
-func update_amplitude_frequency_all():
+func update_amplitude_frequency_all() -> void:
 	var amp_length_ratio := amplitude_base / wavelength_base
 	var amplitude := Plane(0,0,0,0)
 	var frequency := Plane(0,0,0,0)
