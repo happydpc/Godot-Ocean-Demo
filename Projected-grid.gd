@@ -21,12 +21,12 @@ export(float) var noise_frequency := 0.065
 export(float) var noise_speed := 0.48
 
 var res := 100.0
-var waves_data: Array
 var wd_amplitude: Array
 var wd_frequency: Array
 var wd_steepness: Array
 var wd_wind_directionX: Array
 var wd_wind_directionY: Array
+var init_done := false
 
 func _ready():
 	randomize()
@@ -49,24 +49,17 @@ func _ready():
 	add_vertex(-Vector3(1,1,1)*pow(2,32))
 	add_vertex(Vector3(1,1,1)*pow(2,32))
 	end()
-	var a := []
 	for i in range(NUMBER_OF_WAVES):
-		a.push_back(Plane(0,0,0,0))
 		wd_amplitude.push_back(Plane(0,0,0,0))
 		wd_frequency.push_back(Plane(0,0,0,0))
 		wd_steepness.push_back(Plane(0,0,0,0))
 		wd_wind_directionX.push_back(Plane(0,0,0,0))
 		wd_wind_directionY.push_back(Plane(0,0,0,0))
-	waves_data = [ 
-		a.duplicate(),
-		a.duplicate(),
-		a.duplicate(),
-		a.duplicate(),
-		a.duplicate()
-	]
+
 	update_waves()
 
 	material_override.set_shader_param('waves_vectors', NUMBER_OF_WAVES)
+	init_done = true
 
 func _process(delta):
 	material_override.set_shader_param('time_offset', OS.get_ticks_msec()/1000.0 * speed)
@@ -136,13 +129,13 @@ func wave_v4(new_p: Vector3, amplitude: Plane, steepness: Plane, windX: Plane, w
 func get_displace(position: Vector2) -> Vector3:
 	var new_p := Vector3(position.x, 0.0, position.y)
 
-	var d := waves_data
-	if d and d.size() > 0 and d[0] and d[0].size() > 0:
+	if init_done:
 		var time := OS.get_ticks_msec()/1000.0 * speed
 		for i in range(NUMBER_OF_WAVES):
-			new_p = wave_v4(new_p, d[AMPLITUDE][i], d[STEEPNESS][i]
-			, d[WIND_DIRECTIONX][i], d[WIND_DIRECTIONY][i], d[FREQUENCY][i]
+			new_p = wave_v4(new_p, wd_amplitude[i], wd_steepness[i]
+			, wd_wind_directionX[i], wd_wind_directionY[i], wd_frequency[i]
 			, position, time)
+			
 	return new_p
 
 func update_waves():
@@ -176,9 +169,9 @@ func update_amplitude_frequency_all():
 		amplitude.d = amp_length_ratio * _wavelength
 		frequency.d = sqrt(0.098 * TAU/_wavelength)
 	
-		waves_data[AMPLITUDE][i] = amplitude
+		wd_amplitude[i] = amplitude
 		material_override.set_shader_param('amplitude' + str(i), amplitude)
-		waves_data[FREQUENCY][i] = frequency
+		wd_frequency[i] = frequency
 		material_override.set_shader_param('frequency' + str(i), frequency)
 
 func update_steepness_all() -> void:
@@ -189,7 +182,7 @@ func update_steepness_all() -> void:
 		steepness.y = rand_range(0, steepness_base)
 		steepness.z = rand_range(0, steepness_base)
 		steepness.d = rand_range(0, steepness_base)
-		waves_data[STEEPNESS][i] = steepness
+		wd_steepness[i] = steepness
 		material_override.set_shader_param('steepness' + str(i), steepness)
 
 func update_wind_direction_all() -> void:
@@ -214,7 +207,7 @@ func update_wind_direction_all() -> void:
 		wind_directionX.d = _wind_direction.x
 		wind_directionY.d = _wind_direction.y
 	
-		waves_data[WIND_DIRECTIONX][i] = wind_directionX
+		wd_wind_directionX[i] = wind_directionX
 		material_override.set_shader_param('wind_directionX' + str(i), wind_directionX)
-		waves_data[WIND_DIRECTIONY][i] = wind_directionY
+		wd_wind_directionY[i] = wind_directionY
 		material_override.set_shader_param('wind_directionY' + str(i), wind_directionY)
