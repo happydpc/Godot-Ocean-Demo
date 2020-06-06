@@ -1,21 +1,33 @@
 extends Panel
 
-onready var ocean = $"../Ocean"
+onready var ocean : Ocean = $"../Ocean"
 
-var wind_direction = Vector2()
+func _on_amplitude_changed(value: float) -> void:
+	ocean.set_amplitude(value)
 
-func _process(delta):
-	for i in $Settings.get_children():
-		match i.name:
-			"Seed": ocean.set_seed(hash($Settings/Seed/LineEdit.text))
-			"Amplitude": ocean.set_amplitude($Settings/Amplitude/HSlider.value)
-			"Wavelength": ocean.set_wavelength($Settings/Wavelength/HSlider.value)
-			"Steepness": ocean.set_steepness($Settings/Steepness/HSlider.value)
-			"WindDirectionX": wind_direction.x = $Settings/WindDirectionX/HSlider.value
-			"WindDirectionY": wind_direction.y = $Settings/WindDirectionY/HSlider.value
-			"WindAlign": ocean.set_wind_align($Settings/WindAlign/HSlider.value)
-			"Speed": ocean.set_speed($Settings/Speed/HSlider.value)
-			"Noise": ocean.set_noise_enabled($Settings/Noise/CheckBox.pressed)
-			"NoiseAmp": ocean.set_noise_amplitude($Settings/NoiseAmp/HSlider.value)
-			"NoiseFreq": ocean.set_noise_frequency($Settings/NoiseFreq/HSlider.value)
-			"NoiseSpeed": ocean.set_noise_speed($Settings/NoiseSpeed/HSlider.value)
+func _on_wavelength_changed(value: float) -> void:
+	ocean.set_wavelength(value)
+
+func _on_stepness_changed(value: float) -> void:
+	ocean.set_steepness(value)
+
+func _on_windX_changed(value: float) -> void:
+	ocean.set_wind_directionX(value)
+
+func _on_windY_changed(value: float) -> void:
+	ocean.set_wind_directionY(value)
+
+func _on_windalign_changed(value: float) -> void:
+	ocean.set_wind_align(value)
+
+func _on_speed_changed(value: float) -> void:
+	ocean.set_speed(value)
+
+func _on_noise_amp_changed(value: float) -> void:
+	ocean.set_noise_amplitude(value)
+
+func _on_noise_freq_changed(value: float) -> void:
+	ocean.set_noise_frequency(value)
+
+func _on_noise_speed_changed(value: float) -> void:
+	ocean.set_noise_speed(value)
