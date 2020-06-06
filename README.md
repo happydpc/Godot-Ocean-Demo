@@ -1,6 +1,13 @@
 # Godot-Ocean-Demo
-An ocean demo in Godot 3.0.
-I am very proud of this demo and I want to thank you for trying it out.
+An ocean demo in Godot 3.2, heavily based on https://github.com/SIsilicon/Godot-Ocean-Demo
+
+I have updated the Godot version to 3.2.1, and switched to GLES2 backend, as Godot is moving to GLES2 + Vulkan in the near future, deprecating the GLES3 backend.
+
+As I was unable to make texture lookups work (to replace the GLES3-only texelFetch), I have vec4 uniforms for amplitude, frequency ecc. a single vec4 can contain (surprise!) four variables, a set of three variables are defined. So calculation of waves was completely reorganized.
+
+The GDScript code handling parameters now use events, and also updating shader parameters was simplified.
+
+As a bonus, now the floating mesh follows the ocean's wave shape.
 
 ## How to customize the ocean
 The ocean demo uses what's known as Gerstner waves. A constant collection of them is used to create that *wavy* feel of the waters. It also uses a lil bit of noise to really sell the effect. Both of these features are customizable with almost self-explanatory parameters.
@@ -19,11 +26,7 @@ The ocean demo uses what's known as Gerstner waves. A constant collection of the
 
 -**Speed** controls how fast the waves propagates.
 
--**Seed** determines the final parameters of each wave. Find the seed that you like the best.
-
 ### Noise parameters
-
--**Noise Enabled**. Yeah. Whether to use noise at all.
 
 -**Noise Amp** controls how high the noise looks.
 
@@ -48,5 +51,7 @@ When running the project(sorry if it's slow to load. I'm looking into that.) You
 -**Q key** toggle between fly and edit mode. You cant play with the ocean parameters and fly at the same time.
 
 # Credits
+
+Code havily based on Roujel Williams code (https://github.com/SIsilicon/Godot-Ocean-Demo)
 
 The flying code is from Jeremy Bullock's youtube tutorial series on first person control.
