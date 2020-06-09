@@ -37,19 +37,14 @@ func _ready() -> void:
 		for i in range(res):
 			var x := i/res - 0.5
 
-			var new_x := x
-			var new_y := y
-
 			add_vertex(Vector3(x*2, 0, -y*2))
-
-			new_y = n_y - translation.z
 			add_vertex(Vector3(x*2, 0, -n_y*2))
 		end()
 	begin(Mesh.PRIMITIVE_POINTS)
 	add_vertex(-Vector3(1,1,1)*pow(2,32))
 	add_vertex(Vector3(1,1,1)*pow(2,32))
 	end()
-	for i in range(NUMBER_OF_WAVES):
+	for _i in range(NUMBER_OF_WAVES):
 		wd_amplitude.push_back(Plane(0,0,0,0))
 		wd_frequency.push_back(Plane(0,0,0,0))
 		wd_steepness.push_back(Plane(0,0,0,0))
@@ -61,7 +56,7 @@ func _ready() -> void:
 	material_override.set_shader_param('waves_vectors', NUMBER_OF_WAVES)
 	init_done = true
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	material_override.set_shader_param('time_offset', OS.get_ticks_msec()/1000.0 * speed)
 
 func set_wavelength(value: float) -> void:
